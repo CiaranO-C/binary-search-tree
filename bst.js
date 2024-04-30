@@ -42,43 +42,71 @@ function Tree(data) {
     }
   }
 
-  function insert(value){
+  function insert(value) {
     insertRecursive(root, value);
 
     function insertRecursive(root, value) {
-        if (root === null) {
-          root = Node(value);
-          return root;
-        }
-    
-        if (value < root.data) {
-          root.left = insertRecursive(root.left, value);
-        } else {
-          root.right = insertRecursive(root.right, value);
-        }
-        return root
-      }    
+      if (root === null) {
+        root = Node(value);
+        return root;
+      }
+      if (value < root.data) {
+        root.left = insertRecursive(root.left, value);
+      } else {
+        root.right = insertRecursive(root.right, value);
+      }
+      return root;
+    }
   }
 
-  
   function deleteItem(value) {
-    let parentNode = root;
-    let currentNode = root;
-    while (currentNode.data != value) {
-      parentNode = currentNode;
-      if (value < currentNode.data) {
-        currentNode = currentNode.left;
+    deleteRecursive(root, value);
+
+    function deleteRecursive(root, value) {
+      if (root === null) {
+        return root;
+      }
+      if (value < root.data) {
+        root.left = deleteRecursive(root.left, value);
+      } else if (value > root.data) {
+        root.right = deleteRecursive(root.right, value);
       } else {
-        currentNode = currentNode.right;
+        if (root.left === null) {
+          return root.right;
+        } else if (root.right === null) {
+          return root.left;
+        }
+        const minValue = findMinValue(root.right);
+        root.right = deleteRecursive(root.right, minValue);
+        root.data = minValue;
+      }
+      return root;
+    }
+
+    function findMinValue(root) {
+      while (root.left != null) {
+        root = root.left;
+      }
+      return root.data;
+    }
+  }
+
+  function find(value) {
+    const node = findRecursive(root, value);
+
+    function findRecursive(root, value) {
+      if (root === null) {
+        console.log("Value not found");
+        return null;
+      } else if (root.data === value) {
+        return root;
+      } else {
+        let targetNode = value < root.data ? root.left : root.right;
+        targetNode = findRecursive(targetNode, value);
+        return targetNode;
       }
     }
-    if (!currentNode.left && !currentNode.right) {
-      currentNode.data < parentNode.data
-        ? (parentNode.left = null)
-        : (parentNode.right = null);
-    } else if (currentNode.left && currentNode.right) {
-      let;
-    }
+    return node;
   }
 
   return {
@@ -87,6 +115,7 @@ function Tree(data) {
     printTree,
     insert,
     deleteItem,
+    find,
   };
 }
 
@@ -148,3 +177,8 @@ tree.printTree();
 
 tree.insert(41);
 tree.printTree();
+
+tree.deleteItem(22);
+tree.printTree();
+
+console.log(tree.find(5));
