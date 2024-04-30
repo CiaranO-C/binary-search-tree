@@ -109,6 +109,110 @@ function Tree(data) {
     return node;
   }
 
+  function levelOrder(callback) {
+    const breadthArray = [];
+    levelOrderRecurse(callback);
+
+    function levelOrderRecurse(callback, queue = [root]) {
+      if (queue.length === 0) return null;
+
+      const currentNode = queue.shift();
+      if (currentNode.left) queue.push(currentNode.left);
+      if (currentNode.right) queue.push(currentNode.right);
+      if (callback) callback(currentNode);
+
+      breadthArray.push(currentNode.data);
+      levelOrderRecurse(callback, queue);
+    }
+    if (!callback) return breadthArray;
+  }
+
+  function inOrder(callback) {
+    const inOrderValues = [];
+    inOrderRecursive();
+    function inOrderRecursive(currentNode = root) {
+      if (currentNode === null) return null;
+
+      currentNode.left = inOrderRecursive(currentNode.left);
+      if (callback) {
+        callback(currentNode);
+      } else {
+        inOrderValues.push(currentNode.data);
+      }
+      currentNode.right = inOrderRecursive(currentNode.right);
+
+      return currentNode;
+    }
+    if (!callback) return inOrderValues;
+    return null;
+  }
+
+  function preOrder(callback) {
+    const preOrderValues = [];
+    preOrderRecursive();
+
+    function preOrderRecursive(currentNode = root) {
+      if (currentNode === null) return null;
+
+      if (callback) {
+        callback(currentNode);
+      } else {
+        preOrderValues.push(currentNode.data);
+      }
+      currentNode.left = preOrderRecursive(currentNode.left);
+      currentNode.right = preOrderRecursive(currentNode.right);
+
+      return currentNode;
+    }
+    if (!callback) return preOrderValues;
+    return null;
+  }
+
+  function postOrder(callback) {
+    const postOrderValues = [];
+    postOrderRecursive();
+    function postOrderRecursive(currentNode = root) {
+      if (currentNode === null) return null;
+
+      currentNode.left = postOrderRecursive(currentNode.left);
+      currentNode.right = postOrderRecursive(currentNode.right);
+      if (callback) {
+        callback(currentNode);
+      } else {
+        postOrderValues.push(currentNode.data);
+      }
+      return currentNode;
+    }
+    if (!callback) return postOrderValues;
+    return null;
+  }
+
+  function height(node) {
+    if (node === null) return -1;
+    const nodeHeight = Math.max(height(node.left), height(node.right)) + 1;
+
+    return nodeHeight;
+  }
+
+  function depth(targetNode) {
+    let nodeDepth = 0;
+    depthRecursive(targetNode);
+    function depthRecursive(targetNode, currentNode = root) {
+      if (currentNode === targetNode) return;
+      nodeDepth++;
+      currentNode =
+        targetNode.data < currentNode.data
+          ? currentNode.left
+          : currentNode.right;
+      depthRecursive(targetNode, currentNode);
+    }
+    return nodeDepth;
+  }
+
+  function isBalanced() {}
+
+  function rebalance() {}
+
   return {
     root,
     buildTree,
@@ -116,6 +220,14 @@ function Tree(data) {
     insert,
     deleteItem,
     find,
+    levelOrder,
+    inOrder,
+    preOrder,
+    postOrder,
+    height,
+    depth,
+    isBalanced,
+    rebalance,
   };
 }
 
@@ -182,3 +294,24 @@ tree.deleteItem(22);
 tree.printTree();
 
 console.log(tree.find(5));
+
+function printNodeValue(node) {
+  console.log(node.data);
+}
+
+tree.levelOrder(printNodeValue);
+console.log(tree.levelOrder());
+
+tree.inOrder(printNodeValue);
+console.log(tree.inOrder());
+
+tree.preOrder(printNodeValue);
+console.log(tree.preOrder());
+
+tree.postOrder(printNodeValue);
+console.log(tree.postOrder());
+
+console.log(tree.height(tree.find(8)));
+console.log(tree.height(tree.find(42)));
+
+console.log(tree.depth(tree.find(40)));
