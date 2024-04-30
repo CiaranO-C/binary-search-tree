@@ -42,11 +42,29 @@ function Tree(data) {
     }
   }
 
-  function insert(value) {
-    const node = Node(value);
+  function insert(value){
+    insertRecursive(root, value);
+
+    function insertRecursive(root, value) {
+        if (root === null) {
+          root = Node(value);
+          return root;
+        }
+    
+        if (value < root.data) {
+          root.left = insertRecursive(root.left, value);
+        } else {
+          root.right = insertRecursive(root.right, value);
+        }
+        return root
+      }    
+  }
+
+  
+  function deleteItem(value) {
     let parentNode = root;
     let currentNode = root;
-    while (currentNode != null) {
+    while (currentNode.data != value) {
       parentNode = currentNode;
       if (value < currentNode.data) {
         currentNode = currentNode.left;
@@ -54,15 +72,14 @@ function Tree(data) {
         currentNode = currentNode.right;
       }
     }
-    value < parentNode.data
-      ? (parentNode.left = node)
-      : (parentNode.right = node);
+    if (!currentNode.left && !currentNode.right) {
+      currentNode.data < parentNode.data
+        ? (parentNode.left = null)
+        : (parentNode.right = null);
+    } else if (currentNode.left && currentNode.right) {
+      let;
+    }
   }
-
-  function deleteItem(value){
-    
-  }
-
 
   return {
     root,
