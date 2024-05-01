@@ -8,7 +8,7 @@ function Node(data, left = null, right = null) {
 
 function Tree(data) {
   const sortedData = mergeSort(data);
-  const root = buildTree(sortedData);
+  let root = buildTree(sortedData);
 
   function buildTree(array) {
     if (array.length === 0) {
@@ -209,9 +209,31 @@ function Tree(data) {
     return nodeDepth;
   }
 
-  function isBalanced() {}
+  function isBalanced() {
+    const balanced = Boolean(balancedRecursive(root));
+    function balancedRecursive(currentNode) {
+      if (currentNode === null) return -1;
+      
+      const heightLeft = balancedRecursive(currentNode.left);
+      const heightRight = balancedRecursive(currentNode.right);
 
-  function rebalance() {}
+      if(heightLeft === null || heightRight === null) return null;
+
+      const heightDifference = Math.abs(heightLeft - heightRight);
+      if (heightDifference <= 1) {
+        const nodeHeight = Math.max(heightLeft, heightRight) + 1;
+        return nodeHeight;
+      }
+      console.log("imbalance!");
+      return null;
+    }
+    return balanced;
+  }
+
+  function rebalance() {
+    const sortedData = mergeSort(inOrder());
+    root = buildTree(sortedData);
+  }
 
   return {
     root,
@@ -287,11 +309,11 @@ let tree = Tree(data);
 
 tree.printTree();
 
-tree.insert(41);
-tree.printTree();
+//tree.insert(41);
+//tree.printTree();
 
-tree.deleteItem(22);
-tree.printTree();
+//tree.deleteItem(22);
+//tree.printTree();
 
 console.log(tree.find(5));
 
@@ -299,7 +321,7 @@ function printNodeValue(node) {
   console.log(node.data);
 }
 
-tree.levelOrder(printNodeValue);
+/*tree.levelOrder(printNodeValue);
 console.log(tree.levelOrder());
 
 tree.inOrder(printNodeValue);
@@ -309,9 +331,29 @@ tree.preOrder(printNodeValue);
 console.log(tree.preOrder());
 
 tree.postOrder(printNodeValue);
-console.log(tree.postOrder());
+console.log(tree.postOrder());*/
 
 console.log(tree.height(tree.find(8)));
 console.log(tree.height(tree.find(42)));
 
 console.log(tree.depth(tree.find(40)));
+
+/*tree.insert(50);
+tree.insert(55);
+tree.insert(56);
+tree.insert(57);
+tree.insert(58);
+tree.insert(59);
+tree.printTree();*/
+console.log("balancing test");
+console.log(tree.isBalanced());
+
+tree.insert(12);
+tree.insert(15);
+
+tree.printTree();
+console.log(tree.isBalanced());
+
+tree.rebalance();
+tree.printTree();
+console.log(tree.isBalanced());
