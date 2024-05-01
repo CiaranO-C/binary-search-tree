@@ -17,7 +17,6 @@ function Tree(data) {
     const left = 0;
     const right = array.length - 1;
     const mid = Math.floor(left + right / 2);
-    console.log(array[mid]);
     const node = Node(array[mid]);
     node.left = buildTree(array.slice(0, mid));
     node.right = buildTree(array.slice(mid + 1));
@@ -213,11 +212,11 @@ function Tree(data) {
     const balanced = Boolean(balancedRecursive(root));
     function balancedRecursive(currentNode) {
       if (currentNode === null) return -1;
-      
+
       const heightLeft = balancedRecursive(currentNode.left);
       const heightRight = balancedRecursive(currentNode.right);
 
-      if(heightLeft === null || heightRight === null) return null;
+      if (heightLeft === null || heightRight === null) return null;
 
       const heightDifference = Math.abs(heightLeft - heightRight);
       if (heightDifference <= 1) {
@@ -262,8 +261,8 @@ function validateData(data) {
   }
 }
 
+
 function mergeSort(data, sorted = []) {
-  console.log(data);
   if (data.length === 1) {
     return data;
   } else if (!data) {
@@ -281,15 +280,12 @@ function mergeSort(data, sorted = []) {
         i++;
         j++;
       } else if (left[i] < right[j]) {
-        console.log(`${left[i]} < ${right[j]}`);
         sorted.push(left[i]);
         i++;
       } else {
-        console.log(`${left[i]} > ${right[j]}`);
         sorted.push(right[j]);
         j++;
       }
-      console.log(`Sorted -- ${sorted}`);
     }
     if (i >= left.length) {
       sorted = sorted.concat(right.slice(j));
@@ -300,28 +296,22 @@ function mergeSort(data, sorted = []) {
   return sorted;
 }
 
-let x = mergeSort([3, 5, 4, 1, 3, 2]);
-console.log(x);
 
 let data = [1, 5, 8, 11, 22, 25, 31, 40, 42];
 
 let tree = Tree(data);
-
 tree.printTree();
-
-//tree.insert(41);
-//tree.printTree();
-
-//tree.deleteItem(22);
-//tree.printTree();
-
-console.log(tree.find(5));
 
 function printNodeValue(node) {
   console.log(node.data);
 }
 
-/*tree.levelOrder(printNodeValue);
+console.log(tree.height(tree.find(8)));
+console.log(tree.height(tree.find(42)));
+console.log(tree.depth(tree.find(40)));
+
+console.log('Traversal test');
+tree.levelOrder(printNodeValue);
 console.log(tree.levelOrder());
 
 tree.inOrder(printNodeValue);
@@ -331,20 +321,10 @@ tree.preOrder(printNodeValue);
 console.log(tree.preOrder());
 
 tree.postOrder(printNodeValue);
-console.log(tree.postOrder());*/
+console.log(tree.postOrder());
 
-console.log(tree.height(tree.find(8)));
-console.log(tree.height(tree.find(42)));
 
-console.log(tree.depth(tree.find(40)));
 
-/*tree.insert(50);
-tree.insert(55);
-tree.insert(56);
-tree.insert(57);
-tree.insert(58);
-tree.insert(59);
-tree.printTree();*/
 console.log("balancing test");
 console.log(tree.isBalanced());
 
